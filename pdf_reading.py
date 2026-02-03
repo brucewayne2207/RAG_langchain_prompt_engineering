@@ -1,59 +1,59 @@
-# import os
-# from langchain_community.document_loaders import PyMuPDFLoader,PyPDFLoader
-# from langchain_text_splitters import RecursiveCharacterTextSplitter
-# from pathlib import Path
-#
-# # Creating a function to read all pdfs from a directory
-# def process_all_pdf(pdf_directory):
-#     all_docs=[]
-#     pdf_dir = Path(pdf_directory)
-#
-#     pdf_files=list(pdf_dir.glob("**/*.pdf"))
-#     print(f"Found {len(pdf_files)} PDF files to process")
-#
-#     for pdf_file in pdf_files:
-#         print(f"\nProcessing: {pdf_file.name}" )
-#         try:
-#             loader=PyMuPDFLoader(str(pdf_file))
-#             docs=loader.load()
-#
-#             for doc in docs:
-#                 doc.metadata['source_file']=pdf_file.name
-#                 doc.metadata['File_type']='pdf'
-#
-#             all_docs.extend(docs)
-#             print(f"Loaded {len(docs)} pages")
-#
-#         except Exception as e:
-#             print(f"Error:{e}")
-#
-#     print(f"Total documents loaded {len(all_docs)}")
-#     return all_docs
-#
-# all_pdf_documents=process_all_pdf("C:/Users/ricky/PycharmProjects/DS/DS_6/data")
-# # print(all_pdf_documents)
-#
-# # Chunking process
-# def split_documents(document,chunk_size=1000,chunk_overlap=200):
-#     text_splitter=RecursiveCharacterTextSplitter(chunk_size=chunk_size,
-#                                                  chunk_overlap=chunk_overlap,
-#                                                  length_function=len,
-#                                                  separators=["\n\n","\n"," ","''"])
-#     split_docs=text_splitter.split_documents(document)
-#     print(f'Split {len(document)} into {len(split_docs)} chunk')
-#
-#
-#
-#     if split_docs:
-#         print(f"\nExample chunk:")
-#         print(f"Content: {split_docs[0].page_content[:200]} ... ")
-#         print(f"Metadata: {split_docs[0].metadata}")
-#
-#     return split_docs
-#
-# chunk=split_documents(all_pdf_documents)
-# print(chunk)
-#
+import os
+from langchain_community.document_loaders import PyMuPDFLoader,PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from pathlib import Path
+
+# Creating a function to read all pdfs from a directory
+def process_all_pdf(pdf_directory):
+    all_docs=[]
+    pdf_dir = Path(pdf_directory)
+
+    pdf_files=list(pdf_dir.glob("**/*.pdf"))
+    print(f"Found {len(pdf_files)} PDF files to process")
+
+    for pdf_file in pdf_files:
+        print(f"\nProcessing: {pdf_file.name}" )
+        try:
+            loader=PyMuPDFLoader(str(pdf_file))
+            docs=loader.load()
+
+            for doc in docs:
+                doc.metadata['source_file']=pdf_file.name
+                doc.metadata['File_type']='pdf'
+
+            all_docs.extend(docs)
+            print(f"Loaded {len(docs)} pages")
+
+        except Exception as e:
+            print(f"Error:{e}")
+
+    print(f"Total documents loaded {len(all_docs)}")
+    return all_docs
+
+all_pdf_documents=process_all_pdf("C:/Users/ricky/PycharmProjects/DS/DS_6/data")
+print(all_pdf_documents)
+
+# Chunking process
+def split_documents(document,chunk_size=1000,chunk_overlap=200):
+    text_splitter=RecursiveCharacterTextSplitter(chunk_size=chunk_size,
+                                                 chunk_overlap=chunk_overlap,
+                                                 length_function=len,
+                                                 separators=["\n\n","\n"," ","''"])
+    split_docs=text_splitter.split_documents(document)
+    print(f'Split {len(document)} into {len(split_docs)} chunk')
+
+
+
+    if split_docs:
+        print(f"\nExample chunk:")
+        print(f"Content: {split_docs[0].page_content[:200]} ... ")
+        print(f"Metadata: {split_docs[0].metadata}")
+
+    return split_docs
+
+chunk=split_documents(all_pdf_documents)
+print(chunk)
+
 
 # embedding ang vectorDB
 import os
@@ -106,4 +106,5 @@ def generate_embeddings(self, texts: List[str]) -> np.ndarray:
             return embeddings
 
 emb_manager=EmbeddingManager()
+
 print(emb_manager)
